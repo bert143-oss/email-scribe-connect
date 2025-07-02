@@ -41,7 +41,7 @@ export function EmailList({ accessToken, onEmailsChange }: EmailListProps) {
       const { data, error } = await supabase.functions.invoke('gmail-fetch', {
         body: {
           accessToken,
-          maxResults: 20,
+          maxResults: 100,
         },
       });
 
