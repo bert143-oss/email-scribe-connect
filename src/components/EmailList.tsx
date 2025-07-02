@@ -18,9 +18,10 @@ interface Email {
 
 interface EmailListProps {
   accessToken: string | null;
+  onEmailsChange?: (emails: Email[]) => void;
 }
 
-export function EmailList({ accessToken }: EmailListProps) {
+export function EmailList({ accessToken, onEmailsChange }: EmailListProps) {
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
@@ -48,10 +49,12 @@ export function EmailList({ accessToken }: EmailListProps) {
         throw error;
       }
 
-      setEmails(data.messages || []);
+      const fetchedEmails = data.messages || [];
+      setEmails(fetchedEmails);
+      onEmailsChange?.(fetchedEmails);
       toast({
         title: "Success",
-        description: `Fetched ${data.messages?.length || 0} emails`,
+        description: `Fetched ${fetchedEmails.length} emails`,
       });
     } catch (error: any) {
       console.error('Error fetching emails:', error);

@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { GoogleAuth } from '@/components/GoogleAuth';
 import { EmailList } from '@/components/EmailList';
+import { PrioritizedEmails } from '@/components/PrioritizedEmails';
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [emails, setEmails] = useState<any[]>([]);
 
   const handleAuthChange = (newUser: User | null, newAccessToken: string | null) => {
     setUser(newUser);
@@ -24,7 +26,9 @@ const Index = () => {
 
         <GoogleAuth onAuthChange={handleAuthChange} />
         
-        {user && <EmailList accessToken={accessToken} />}
+        {user && <EmailList accessToken={accessToken} onEmailsChange={setEmails} />}
+        
+        {user && <PrioritizedEmails accessToken={accessToken} emails={emails} />}
       </div>
     </div>
   );
